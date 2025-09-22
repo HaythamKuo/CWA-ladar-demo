@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // --- 環境與最新語法 ---
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+
+    // --- Bundler 模式 ---
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+
+    // --- 僅型別檢查，不輸出 JS ---
+    "noEmit": true,
+    "sourceMap": true,
+
+    // --- 嚴格與最佳實踐 ---
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    // --- 需要時可開 ---
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["build", "node_modules"]
+}

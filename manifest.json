@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+
+  "name": "CWA project",
+  "version": "1.0",
+
+  "description": "Demo extension built with Bun + TypeScript",
+
+  "icons": {
+    "48": "public/icons/border-48.png"
+  },
+  "action": {
+    "default_popup": "public/popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.mozilla.org/*"],
+      "js": ["popup.js"]
+    }
+  ]
+}
