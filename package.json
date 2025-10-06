@@ -1,14 +1,16 @@
 {
   "name": "weather",
-  "scripts": {
-    "dev:build": "bun build src/background.ts src/popup.ts --outdir build --watch",
-    "dev:typecheck": "bun x tsc --noEmit -w",
-    "dev": "bun run dev:build & bun run dev:typecheck",
-    "build": "bun build src/background.ts src/popup.ts --outdir build",
-    "typecheck": "bun x tsc --noEmit"
-  },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/firefox-webext-browser": "^120.0.5",
     "typescript": "^5.5.0"
+  },
+  "scripts": {
+    "dev:build": "bun build src/background.ts src/popup.ts --outdir dist --watch",
+    "dev:typecheck": "bun x tsc --noEmit -w",
+    "dev": "bun run dev:build & bun run dev:typecheck",
+    "build": "bun build src/background.ts src/popup.ts --outdir dist",
+    "typecheck": "bun x tsc --noEmit",
+    "server": "bun run src/server.js"
   }
 }
