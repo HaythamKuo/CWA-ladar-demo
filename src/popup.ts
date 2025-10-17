@@ -1,21 +1,36 @@
-async function fetchLadar() {
+import type { RadarData } from "./utils/interfaceInstance";
+async function fetchLadar(): Promise<RadarData> {
   try {
-    const res = await fetch("http://localhost:3005/ladar");
+    const res = await fetch("http://localhost:3005/api/cwajson");
     if (!res.ok) {
       throw new Error(`無法請求資料: ${res.status}`);
     }
-    const data = await res.json();
-    console.log(data);
+    const data: RadarData = await res.json();
+
     return data;
-  } catch (error) {
-    console.log(error);
+  } catch (error: unknown) {
+    console.error("❌ fetchLadar error:", error);
+
+    throw new Error(error instanceof Error ? error.message : String(error));
   }
 }
 
-fetchLadar().then((data) => {
-  if (data) {
-    // 在 popup 或 UI 中顯示資料
-    const ladar = document.getElementById("ladar");
-    ladar!.textContent = JSON.stringify(data, null, 2); // 美化縮排
+async function renderRadar() {
+  const container = document.getElementById("ladar");
+  if (!container) return;
+
+  try {
+    const radarImg = await fetchLadar();
+
+    container.innerHTML = `
+      <p>時間：${radarImg.dateTime}</p>
+      <img src=${radarImg.radarUrl} alt='雷達回波圖' />
+`;
+  } catch (error) {
+    console.error(error);
+    container.textContent = `取得資料失敗: ${
+      error instanceof Error ? error.message : String(error)
+    }`;
   }
-});
+}
+renderRadar();

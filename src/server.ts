@@ -1,18 +1,24 @@
 import { serve } from "bun";
-import { handleLadarApi } from "./controllers/weather";
-
-const port: number = 3005;
+import { getRadarData } from "./controllers/radar";
 
 serve({
-  port,
-  async fetch(req) {
-    const url = new URL(req.url);
+  port: 3005,
+  routes: {
+    "/": () => new Response("hello,world"),
+    "/api/cwajson": async () => {
+      try {
+        const data = await getRadarData();
 
-    if (url.pathname === "/ladar") {
-      return await handleLadarApi();
-    }
-
-    return new Response("Not Found", { status: 404 });
+        return Response.json(data, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": '"GET, POST, OPTIONS"',
+          },
+        });
+      } catch (err) {
+        console.error("❌ API Error:", err);
+        return Response.json({ error: "Server error" }, { status: 500 });
+      }
+    },
   },
 });
-console.log(`Bun server running at http://localhost:${port}`);
