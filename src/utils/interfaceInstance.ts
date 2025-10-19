@@ -35,3 +35,7 @@ export interface CwaOpenData {
     };
   };
 }
+
+export interface RadarRes extends RadarData {
+  apiLatestTime?: string;
+}
