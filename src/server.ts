@@ -1,13 +1,16 @@
 import { serve } from "bun";
-import { radarDataCache } from "./controllers/radar";
+import { getCacheRadar } from "./controllers/radar";
+import type { AreaKey } from "./utils/areas";
 
 serve({
   port: 3005,
   routes: {
     "/": () => new Response("hello,world"),
-    "/api/cwajson": async () => {
+    "/api/cwajson/:area": async (req) => {
+      const { area } = req.params as { area: AreaKey };
+
       try {
-        const data = await radarDataCache.getCacheRadar();
+        const data = await getCacheRadar(area);
 
         return Response.json(data, {
           headers: {

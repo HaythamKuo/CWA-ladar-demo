@@ -1,10 +1,14 @@
 import type { CwaOpenData } from "../utils/interfaceInstance";
+import { areas } from "../utils/areas";
+import type { AreaKey } from "../utils/areas";
 
-const testUrl: string = `https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0084-001?Authorization=${process.env.CWA_AUTHORIZED_KEY}&downloadType=WEB&format=JSON`;
-
-export async function fetchCwaData(): Promise<CwaOpenData> {
+export async function fetchCwaData(area: AreaKey): Promise<CwaOpenData> {
   try {
-    const res = await fetch(testUrl);
+    const url = areas[area];
+
+    if (!url) throw new Error("找不到指定的區域:" + area);
+
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`發生錯誤, status為${res.status}`);
     const data: CwaOpenData = await res.json();
     return data;

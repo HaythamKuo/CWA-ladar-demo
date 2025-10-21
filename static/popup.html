@@ -2,22 +2,32 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="light" />
     <link rel="stylesheet" href="./popup.css" />
     <title>雷達回波圖</title>
   </head>
   <body>
-    <img id="radar-img" src="" alt="載入中..." />
-
     <!-- Firefox內部提供的樣式 -->
     <section class="content">
-      <h1>Firefox Style</h1>
+      <h1>地區性降雨雷達回波圖</h1>
+
       <!-- <button class="primary">主要按鈕</button>
       <button class="secondary">次要按鈕</button> -->
-      <div id="ladar" style="width: 100%">
-        <!-- <img alt="img" id="testImg" /> -->
+      <div id="ladar">
+        <div class="headers">
+          <img src="./icons/Gear-icon.png" class="header_setting" alt="gear" />
+        </div>
+        <div class="btnCollection">
+          <button title="north" class="north">新北</button>
+          <button title="center" class="center">台中</button>
+          <button title="south" class="south">高雄</button>
+        </div>
+        <div class="wrapperImg"></div>
       </div>
     </section>
+    <footer class="panel-section panel-section-footer">
+      資料來源：中央氣象局 (CWB)
+    </footer>
     <script type="module" src="../dist/popup.js"></script>
   </body>
 </html>

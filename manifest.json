@@ -1,20 +1,23 @@
 {
   "manifest_version": 2,
-  "name": "CWA project",
+  "name": "CWA regional ladar representation project",
   "version": "1.0",
   "description": "Demo extension built with Bun + TypeScript",
   "icons": {
-    "48": "static/icons/border-48.png"
+    "48": "static/icons/border-48.png",
+    "32": "static/icons/Gear-icon.png"
   },
 
   "browser_action": {
     "default_popup": "static/popup.html",
-    "default_icon": "static/icons/border-48.png"
+    "default_icon": "static/icons/border-48.png",
+    "default_title": "雷達回波圖"
   },
 
   "options_ui": {
     "page": "static/options.html",
-    "chrome_style": true
+    "chrome_style": true,
+    "browser_style": true
   },
 
   "permissions": [
@@ -28,6 +31,6 @@
 
   "background": {
     "scripts": ["dist/background.js"],
-    "persistent": true
+    "persistent": false
   }
 }

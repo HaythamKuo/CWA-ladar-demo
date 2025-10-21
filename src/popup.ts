@@ -1,15 +1,14 @@
-import type { RadarRes } from "./utils/interfaceInstance";
+import type { AreaKey } from "./utils/areas";
 
-//驗證資料格式
-function isRadarRes(data: any): data is RadarRes {
-  return (
-    data &&
-    typeof data.dateTime === "string" &&
-    typeof data.radarUrl === "string" &&
-    (typeof data.apiLatestTime === undefined ||
-      typeof data.apiLatestTime === "string")
-  );
+const btnContainer = document.querySelector(".btnCollection") as HTMLElement;
+const btnTargets = btnContainer.querySelectorAll("button");
+let specificArea: AreaKey = "north";
+
+if (!btnContainer) {
+  console.log("按鈕容器失效");
 }
+
+//將時間格式化
 function formatTime(time: string) {
   const date = new Date(time);
 
@@ -24,38 +23,49 @@ function formatTime(time: string) {
   return formattedTime;
 }
 
-async function fetchLadar(): Promise<RadarRes> {
+const data = await browser.runtime.sendMessage({
+  type: "FETCH_AREA",
+  data: specificArea,
+});
+
+//將資料渲染到html上
+async function renderRadar(area: AreaKey) {
+  const container = document.getElementById("ladar");
+  const wrapper = document.querySelector(".wrapperImg");
+  const header = document.querySelector(".headers");
+
+  if (!container || !wrapper || !header) {
+    console.log("有元素消失了");
+    return;
+  }
+
   try {
-    const res = await fetch("http://localhost:3005/api/cwajson");
-    if (!res.ok) {
-      throw new Error(`無法請求資料: ${res.status}`);
+    const radarImg = data;
+
+    btnTargets.forEach((e) => {
+      e.classList.remove("default");
+      if (e.getAttribute("title") === area) e.classList.add("default");
+    });
+
+    let timeEl = document.querySelector(".lastTime");
+
+    if (!timeEl) {
+      timeEl = document.createElement("p");
+      timeEl.classList.add("lastTime");
     }
 
-    const data = await res.json();
+    header.prepend(timeEl);
+    timeEl.textContent =
+      "最近一次更新時間: " +
+      formatTime(radarImg.apiLatestTime ?? radarImg.dateTime).replace(
+        /:\d{2}$/,
+        ""
+      ) +
+      "分";
 
-    if (isRadarRes(data)) throw new Error("後端格式錯誤");
-
-    console.log(data);
-
-    return data;
-  } catch (error: unknown) {
-    console.error("❌ fetchLadar error:", error);
-
-    throw new Error(error instanceof Error ? error.message : String(error));
-  }
-}
-
-async function renderRadar() {
-  const container = document.getElementById("ladar");
-  if (!container) return;
-
-  try {
-    const radarImg = await fetchLadar();
-
-    container.innerHTML = `
-      <p>時間：${formatTime(radarImg.apiLatestTime ?? radarImg.dateTime)}</p>
-      <img src=${radarImg.radarUrl} alt='雷達回波圖' />
-`;
+    wrapper.innerHTML = `
+        <img src='${radarImg.radarUrl}' alt='雷達回波圖' />
+    `;
   } catch (error) {
     console.error(error);
     container.textContent = `取得資料失敗: ${
@@ -63,4 +73,18 @@ async function renderRadar() {
     }`;
   }
 }
-renderRadar();
+renderRadar(specificArea);
+
+//點擊事件更新api
+btnContainer?.addEventListener("click", async (e: MouseEvent) => {
+  const target = e.target as HTMLButtonElement;
+
+  if (target && target.tagName === "BUTTON") {
+    btnTargets.forEach((b) => b.classList.remove("selected"));
+  }
+
+  target.classList.add("selected");
+
+  specificArea = target.getAttribute("title") as AreaKey;
+  await renderRadar(specificArea);
+});

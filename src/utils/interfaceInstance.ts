@@ -1,6 +1,7 @@
 export interface RadarData {
   dateTime: string;
   radarUrl: string;
+  area?: string;
 }
 
 export interface CwaOpenData {

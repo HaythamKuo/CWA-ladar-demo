@@ -1,7 +1,8 @@
 import type { RadarData, CwaOpenData } from "../utils/interfaceInstance";
+import type { AreaKey } from "../utils/areas";
 import { fetchCwaData } from "./weather";
 
-function designDataType(props: CwaOpenData): RadarData {
+function designDataType(props: CwaOpenData, area: AreaKey): RadarData {
   const {
     cwaopendata: {
       dataset: {
@@ -14,74 +15,35 @@ function designDataType(props: CwaOpenData): RadarData {
   return {
     dateTime: DateTime,
     radarUrl: ProductURL,
+    area,
   };
 }
 
-class RadarDataObject implements RadarData {
-  constructor(public dateTime: string, public radarUrl: string) {}
-
-  info(): string {
-    return `雷達圖時間：${this.dateTime}`;
-  }
-}
-
 //最終輸出的邏輯 代表封裝好的資料（尚未做快取處理）
-export async function getRadarData() {
-  const rawData = await fetchCwaData();
+export async function getRadarData(area: AreaKey) {
+  // const rawData = await fetchCwaData("center");
+  const rawData = await fetchCwaData(area);
   if (!rawData) throw new Error("沒有雷達回波圖");
 
-  const extractDta = designDataType(rawData);
+  //const extractDta = designDataType(rawData);
+  const plainData: RadarData = designDataType(rawData, area);
 
-  return new RadarDataObject(extractDta.dateTime, extractDta.radarUrl);
+  return plainData;
 }
 
-//封裝裡加上快取邏輯
-class RadarService {
-  private cache: RadarDataObject | null = null;
-  private lastFetchTime = 0;
-  private readonly cacheDuration = 5 * 60 * 1000;
-  private lastUpdateTime: string | null = null;
+const cache = new Map<AreaKey, { data: RadarData; lastUpdateTime: number }>();
+const cacheDuration = 5 * 60 * 1000;
 
-  //進行快取處理
-  async getCacheRadar() {
-    const now = Date.now();
-    const isCacheLate = now - this.lastFetchTime > this.cacheDuration;
+export async function getCacheRadar(area: AreaKey): Promise<RadarData> {
+  const now = Date.now();
+  const cached = cache.get(area);
 
-    if (!this.cache || isCacheLate) {
-      console.log("更新cache資料");
-      this.cache = await getRadarData();
-      this.lastFetchTime = now;
-    } else {
-      console.log("使用原有的cache資料");
-    }
-
-    this.updateNewTime();
-
-    return {
-      ...this.cache,
-      apiNewTime: this.lastUpdateTime ?? this.cache?.dateTime,
-    };
+  if (cached && now - cached.lastUpdateTime < cacheDuration) {
+    return cached.data;
   }
 
-  //同步更新最新資料
-  async updateNewTime() {
-    try {
-      const rawData = await fetchCwaData();
-      if (!rawData) throw new Error("看來不會有最新時間");
+  const data = await getRadarData(area);
 
-      const {
-        cwaopendata: {
-          dataset: { DateTime },
-        },
-      } = rawData;
-
-      this.lastUpdateTime = DateTime;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  cache.set(area, { data, lastUpdateTime: now });
+  return data;
 }
-
-export const radarDataCache = new RadarService();
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
