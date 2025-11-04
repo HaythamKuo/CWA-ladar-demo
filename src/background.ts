@@ -1,18 +1,28 @@
 import type { RadarRes } from "./utils/interfaceInstance";
 import type { AreaKey } from "./utils/areas";
 
-//驗證資料格式
+/**
+ * 類型保護函式：驗證輸入資料是否符合預期的 `RadarRes` 格式。
+ *
+ * @param {any} data - 待驗證的任意資料。
+ * @returns {data is RadarRes} 如果資料符合結構，返回 true。
+ */
 function isRadarRes(data: any): data is RadarRes {
   return (
     data &&
     typeof data.dateTime === "string" &&
     typeof data.radarUrl === "string" &&
-    (typeof data.apiLatestTime === undefined ||
-      typeof data.apiLatestTime === "string")
+    (data.apiLatestTime === undefined || typeof data.apiLatestTime === "string")
   );
 }
 
-//負責從後端抓資料
+/**
+ * 從指定的本地端後端 API 抓取特定區域的雷達資料。
+ *
+ * @param {AreaKey} area - 要抓取資料的區域鍵 (AreaKey)。
+ * @returns {Promise<RadarRes>} 成功獲取並驗證後的雷達回應資料物件。
+ * @throws {Error} 如果網路請求失敗、響應碼非 2xx，或資料格式不正確。
+ */
 async function fetchLadar(area: AreaKey): Promise<RadarRes> {
   try {
     const res = await fetch(`http://localhost:3005/api/cwajson/${area}`);
@@ -22,7 +32,8 @@ async function fetchLadar(area: AreaKey): Promise<RadarRes> {
 
     const data = await res.json();
 
-    if (isRadarRes(data)) throw new Error("後端格式錯誤");
+    // if (isRadarRes(data)) throw new Error("後端格式錯誤");
+    if (!isRadarRes(data)) throw new Error("後端格式錯誤");
 
     return data;
   } catch (error: unknown) {

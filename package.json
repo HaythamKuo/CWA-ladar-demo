@@ -12,9 +12,5 @@
     "build": "bun build src/background.ts src/popup.ts --outdir dist",
     "typecheck": "bun x tsc --noEmit",
     "server": "bun run --watch src/server.ts"
-  },
-  "dependencies": {
-    "@napi-rs/canvas": "^0.1.80",
-    "fast-xml-parser": "^5.3.0"
   }
 }
