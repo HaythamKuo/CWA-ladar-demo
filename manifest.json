@@ -4,13 +4,14 @@
   "version": "1.0",
   "description": "Demo extension built with Bun + TypeScript",
   "icons": {
+    "64": "static/icons/weather.png",
     "48": "static/icons/border-48.png",
     "32": "static/icons/Gear-icon.png"
   },
 
   "browser_action": {
     "default_popup": "static/popup.html",
-    "default_icon": "static/icons/border-48.png",
+    "default_icon": "static/icons/weather.png",
     "default_title": "雷達回波圖"
   },
 

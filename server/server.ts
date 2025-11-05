@@ -1,4 +1,5 @@
 import { serve } from "bun";
+
 import { getCacheRadar } from "./controllers/radar";
 import type { AreaKey } from "./utils/areas";
 

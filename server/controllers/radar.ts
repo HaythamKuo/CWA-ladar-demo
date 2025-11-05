@@ -1,5 +1,8 @@
-import type { RadarData, CwaOpenData } from "../utils/interfaceInstance";
-import type { AreaKey } from "../utils/areas";
+import type {
+  RadarData,
+  CwaOpenData,
+} from "../../server/utils/interfaceInstance";
+import type { AreaKey } from "../../server/utils/areas";
 import { fetchCwaData } from "./weather";
 
 /**

@@ -1,4 +1,4 @@
-import type { AreaKey } from "./utils/areas";
+import type { AreaKey } from "../server/utils/areas";
 
 const btnContainer = document.querySelector(".btnCollection") as HTMLElement;
 const btnTargets = btnContainer.querySelectorAll("button");
@@ -78,9 +78,11 @@ async function renderRadar(area: AreaKey) {
       ) +
       "分";
 
-    wrapper.innerHTML = `
-        <img src='${radarImg.radarUrl}' alt='雷達回波圖' />
-    `;
+    wrapper.textContent = "";
+    const img = document.createElement("img");
+    img.src = radarImg.radarUrl;
+    img.alt = "雷達回波圖";
+    wrapper.appendChild(img);
   } catch (error) {
     console.error(error);
     container.textContent = `取得資料失敗: ${
@@ -111,4 +113,4 @@ btnContainer?.addEventListener("click", async (e: MouseEvent) => {
   specificArea = area;
   await renderRadar(specificArea);
 });
-await renderRadar(specificArea);
+renderRadar(specificArea);

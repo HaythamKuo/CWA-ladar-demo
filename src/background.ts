@@ -1,5 +1,5 @@
-import type { RadarRes } from "./utils/interfaceInstance";
-import type { AreaKey } from "./utils/areas";
+import type { RadarRes } from "../server/utils/interfaceInstance";
+import type { AreaKey } from "../server/utils/areas";
 
 /**
  * 類型保護函式：驗證輸入資料是否符合預期的 `RadarRes` 格式。

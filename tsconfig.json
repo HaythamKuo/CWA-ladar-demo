@@ -30,6 +30,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "server/server.ts", "server/utils"],
   "exclude": ["build", "node_modules"]
 }
