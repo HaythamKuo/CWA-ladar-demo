@@ -3,8 +3,10 @@ import { serve } from "bun";
 import { getCacheRadar } from "./controllers/radar";
 import type { AreaKey } from "./utils/areas";
 
+const PORT = Bun.env.PORT ?? 3005;
+
 serve({
-  port: 3005,
+  port: PORT,
   routes: {
     "/": () => new Response("hello,world"),
     "/api/cwajson/:area": async (req) => {
@@ -29,3 +31,4 @@ serve({
     },
   },
 });
+console.log(`Listening on http://localhost:${PORT}`);

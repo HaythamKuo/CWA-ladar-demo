@@ -1,5 +1,6 @@
 {
   "name": "weather",
+  "main": "server.ts",
   "devDependencies": {
     "@types/bun": "latest",
     "@types/firefox-webext-browser": "^120.0.5",
