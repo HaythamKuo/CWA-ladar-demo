@@ -1,7 +1,6 @@
-import type { CwaOpenData } from "../../server/utils/interfaceInstance";
-import { areas } from "../../server/utils/areas";
-
-import type { AreaKey } from "../../server/utils/areas";
+import type { CwaOpenData } from "../utils/interfaceInstance";
+import { areas } from "../utils/areas";
+import type { AreaKey } from "../utils/areas";
 
 export async function fetchCwaData(area: AreaKey): Promise<CwaOpenData> {
   try {
