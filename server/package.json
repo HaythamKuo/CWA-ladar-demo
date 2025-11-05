@@ -6,7 +6,7 @@
     "typescript": "^5.5.0"
   },
   "scripts": {
-    "server": "bun run --watch server.ts"
+    "start": "bun run --watch server.ts"
   },
   "dependencies": {
     "web-ext": "7.6.2"
