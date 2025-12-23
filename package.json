@@ -3,16 +3,19 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/firefox-webext-browser": "^120.0.5",
+    "sass": "^1.97.1",
     "typescript": "^5.5.0"
   },
   "scripts": {
-    "dev:build": "bun build src/background.ts src/popup.ts --outdir dist --watch",
+    "dev:build": "bun build --watch",
     "dev:typecheck": "bun x tsc --noEmit -w",
     "dev": "bun run dev:build & bun run dev:typecheck",
-    "build": "bun build src/background.ts src/popup.ts --outdir dist",
     "typecheck": "bun x tsc --noEmit",
     "server": "bun run --watch server/server.ts",
-    "build:all": "bun build src/background.ts src/popup.ts --outdir dist && cp manifest.json dist/ && cp -r static/* dist/"
+    "build": "bun build src/background.ts src/popup.ts --outdir dist --minify",
+    "build:all": "bun build src/background.ts src/popup.ts --outdir dist --minify && cp manifest.json dist/ && cp -r static/* dist/",
+    "sass:build": "sass src/style.scss dist/style.css --style=compressed",
+    "sass:watch": "sass --watch static/popup.scss static/popup.css"
   },
   "dependencies": {
     "web-ext": "7.6.2"

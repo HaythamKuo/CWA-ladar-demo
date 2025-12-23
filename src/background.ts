@@ -25,7 +25,7 @@ function isRadarRes(data: any): data is RadarRes {
  */
 async function fetchLadar(area: AreaKey): Promise<RadarRes> {
   try {
-    const res = await fetch(`http://localhost:3005/api/cwajson/${area}`);
+    const res = await fetch(`${Bun.env.CWA_SERVER}/api/cwajson/${area}`);
     if (!res.ok) {
       throw new Error(`無法請求資料: ${res.status}`);
     }

@@ -1,3 +1,58 @@
+# Taiwan Weather Radar Extension (Firefox)
+
+This is a Firefox extension built with **TypeScript** and **Bun**.
+It allows users to view real-time radar images from the Central Weather Administration (CWA) by selecting different regions.
+
+## ⚠️ Note to Mozilla Reviewers
+
+This project uses **Bun** as the package manager and bundler.
+Please ensure you have Bun installed or use an environment that supports it to build the source code.
+
+The extension relies on a backend server (deployed on Zeabur) to handle API keys securely. The extension itself **does not** contain any API keys.
+
+## Prerequisites
+
+- **Bun** (v1.0.0 or later)
+- Node.js (optional, but Bun is the primary tool used)
+
+## Build Instructions
+
+Please follow these steps to build the extension from the source code:
+
+### 1. Install Dependencies
+
+Run the following command in the root directory to install all required packages:
+
+```bash
+bun install
+```
+
+### 2. Run the project
+
+If you want to examine the environment, run the scripts:
+
+```bash
+bun run dev
+```
+
+> This script will erect the popup.
+
+```bash
+bun run server
+```
+
+> This script will erect the local server.
+
+### 3. Build the project
+
+```bash
+bun run build
+
+or
+
+bun run build:all
+```
+
 本專案為一個簡單的 Firefox 瀏覽器插件，用於顯示台灣指定地區的雷達回波圖。
 
 ## 簡介

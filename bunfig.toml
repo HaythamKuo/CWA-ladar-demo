@@ -1,0 +1,21 @@
+# bunfig.toml
+# === Build 設定 ===
+[build]
+# 主要編譯進入點：popup + background
+entrypoints = ["src/background.ts", "src/popup.ts"]
+
+# 輸出資料夾
+outdir = "dist"
+
+# 目標環境
+target = "browser"
+
+# 生成 sourcemap 方便 debug
+sourcemap = true
+
+# 打包時壓縮
+minify = true
+
+# === 開發設定 ===
+watch = true
+

@@ -1,6 +1,6 @@
 import type { AreaKey } from "../server/utils/areas";
 
-const btnContainer = document.querySelector(".btnCollection") as HTMLElement;
+const btnContainer = document.querySelector<HTMLElement>(".btnCollection")!;
 const btnTargets = btnContainer.querySelectorAll("button");
 let specificArea: AreaKey = "north";
 
@@ -43,8 +43,8 @@ function formatTime(time: string) {
  */
 async function renderRadar(area: AreaKey) {
   const container = document.getElementById("ladar");
-  const wrapper = document.querySelector(".wrapperImg");
-  const header = document.querySelector(".headers");
+  const wrapper = document.querySelector<HTMLElement>(".wrapperImg");
+  const header = document.querySelector<HTMLElement>(".headers");
 
   if (!container || !wrapper || !header) {
     console.log("有元素消失了");
@@ -62,27 +62,28 @@ async function renderRadar(area: AreaKey) {
       if (e.getAttribute("title") === area) e.classList.add("default");
     });
 
-    let timeEl = document.querySelector(".lastTime");
+    let timeEl = header.querySelector<HTMLParagraphElement>(".lastTime");
 
     if (!timeEl) {
       timeEl = document.createElement("p");
       timeEl.classList.add("lastTime");
+      header.prepend(timeEl);
     }
 
-    header.prepend(timeEl);
-    timeEl.textContent =
-      "最近一次更新時間: " +
-      formatTime(radarImg.apiLatestTime ?? radarImg.dateTime).replace(
-        /:\d{2}$/,
-        ""
-      ) +
-      "分";
+    const displayTime = formatTime(
+      radarImg.apiLatestTime ?? radarImg.dateTime
+    ).replace(/:\d{2}$/, "");
+    timeEl.textContent = `最近一次更新時間: ${displayTime}分`;
 
-    wrapper.textContent = "";
-    const img = document.createElement("img");
-    img.src = radarImg.radarUrl;
-    img.alt = "雷達回波圖";
-    wrapper.appendChild(img);
+    //重構&渲染圖片
+    let imgs = wrapper.querySelector<HTMLImageElement>("img");
+
+    if (!imgs) {
+      imgs = document.createElement("img");
+      imgs.alt = "雷達回波圖";
+      imgs.replaceChildren(imgs);
+    }
+    imgs.src = radarImg?.radarUrl;
   } catch (error) {
     console.error(error);
     container.textContent = `取得資料失敗: ${
