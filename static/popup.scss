@@ -9,7 +9,7 @@
 body {
   margin: 0;
   padding: 10px;
-
+  box-sizing: border-box;
   @include flex-center(column);
 }
 .content {
@@ -22,6 +22,7 @@ body {
 // }
 
 .wrapperImg {
+  @include flex-center();
   width: 500px;
   height: 600px;
 
@@ -91,13 +92,93 @@ body {
       transform: translateY(0);
     }
 
-    &.selected,
-    &.default {
+    &.active {
       color: #fff;
       background-color: #1a1a1a;
       box-shadow: none;
       transform: translateY(0);
       cursor: not-allowed;
     }
+  }
+}
+
+//spinner
+// 變數
+$uib-size: 50px;
+$uib-speed: 1.2s;
+$uib-color: #474554;
+
+.spin {
+  position: relative;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  @include flex-center();
+  display: none;
+  // align-items: center;
+  // justify-content: center;
+  width: $uib-size;
+  height: $uib-size;
+  // background-color: aqua;
+
+  &__dot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 25%;
+    height: 100%;
+    transform-origin: center top;
+
+    &::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 25%;
+      border-radius: 50%;
+      background-color: $uib-color;
+    }
+
+    &:first-child {
+      animation: swing $uib-speed linear infinite;
+    }
+
+    &:last-child {
+      animation: swing2 $uib-speed linear infinite;
+    }
+  }
+}
+
+// 動畫
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+
+  25% {
+    transform: rotate(70deg);
+    animation-timing-function: ease-in;
+  }
+
+  50% {
+    transform: rotate(0deg);
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes swing2 {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: linear;
+  }
+
+  50% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+
+  75% {
+    transform: rotate(-70deg);
+    animation-timing-function: ease-in;
   }
 }

@@ -4,12 +4,13 @@ import type { AreaKey } from "../server/utils/areas";
 const gear = document.querySelector<HTMLImageElement>(".header_setting");
 
 gear?.addEventListener("click", () => {
-  console.log("有被點擊");
-
   browser.runtime
     .openOptionsPage()
     .catch((err) => console.log("開啟options失敗", err));
 });
+
+//宣告spinner
+const spinner = document.querySelector<HTMLElement>(".spin")!;
 
 const btnContainer = document.querySelector<HTMLElement>(".btnCollection")!;
 const btnTargets = btnContainer.querySelectorAll("button");
@@ -25,7 +26,9 @@ if (!btnContainer) {
  * @param {string} time - 待格式化的時間字串 (e.g., ISO 格式)。
  * @returns {string} 格式化後的本地時間字串 (例如：2025/11/04 11:13:01)。
  */
-function formatTime(time: string) {
+function formatTime(time?: string) {
+  if (!time) return;
+
   const date = new Date(time);
 
   const formattedTime = new Intl.DateTimeFormat("zh-tw", {
@@ -53,6 +56,7 @@ function formatTime(time: string) {
  * @returns {Promise<void>}
  */
 async function renderRadar(area: AreaKey) {
+  //宣告雷達容器
   const container = document.getElementById("ladar");
   const wrapper = document.querySelector<HTMLElement>(".wrapperImg");
   const header = document.querySelector<HTMLElement>(".headers");
@@ -63,15 +67,21 @@ async function renderRadar(area: AreaKey) {
   }
 
   try {
+    spinner.style.display = "flex";
+    toggleBtnStatus(true);
+    await pause(2000);
+
     const radarImg = await browser.runtime.sendMessage({
       type: "FETCH_AREA",
       data: specificArea,
     });
 
-    btnTargets.forEach((e) => {
-      e.classList.remove("default");
-      if (e.getAttribute("title") === area) e.classList.add("default");
-    });
+    // btnTargets.forEach((e) => {
+    //   e.classList.remove("default");
+    //   if (e.getAttribute("title") === area) e.classList.add("default");
+    // });
+
+    updateBtnLogic(area);
 
     let timeEl = header.querySelector<HTMLParagraphElement>(".lastTime");
 
@@ -83,7 +93,8 @@ async function renderRadar(area: AreaKey) {
 
     const displayTime = formatTime(
       radarImg.apiLatestTime ?? radarImg.dateTime
-    ).replace(/:\d{2}$/, "");
+    )!.replace(/:\d{2}$/, "");
+
     timeEl.textContent = `最近一次更新時間: ${displayTime}分`;
 
     //重構&渲染圖片
@@ -92,10 +103,25 @@ async function renderRadar(area: AreaKey) {
     if (!imgs) {
       imgs = document.createElement("img");
       imgs.alt = "雷達回波圖";
-      imgs.replaceChildren(imgs);
+      wrapper.replaceChildren(imgs);
     }
+    // if 成功
+    imgs.onload = () => {
+      spinner.style.display = "none"; // 圖片真的顯示出來了才關掉
+      toggleBtnStatus(false);
+    };
+
+    //if 失敗
+    imgs.onerror = () => {
+      spinner.style.display = "none";
+      toggleBtnStatus(false);
+    };
+
     imgs.src = radarImg?.radarUrl;
   } catch (error) {
+    spinner.style.display = "none";
+    toggleBtnStatus(false);
+
     console.error(error);
     container.textContent = `取得資料失敗: ${
       error instanceof Error ? error.message : String(error)
@@ -114,15 +140,37 @@ async function renderRadar(area: AreaKey) {
 btnContainer?.addEventListener("click", async (e: MouseEvent) => {
   const target = e.target as HTMLButtonElement;
 
-  if (target && target.tagName === "BUTTON") {
-    btnTargets.forEach((b) => b.classList.remove("selected"));
-  }
-
-  target.classList.add("selected");
+  if (!target || target.tagName !== "BUTTON") return;
 
   const area = target.getAttribute("title") as AreaKey;
 
   specificArea = area;
+
+  updateBtnLogic(specificArea);
+
   await renderRadar(specificArea);
 });
 renderRadar(specificArea);
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//切換button status
+function toggleBtnStatus(isLoading: boolean) {
+  btnTargets.forEach((b) => (b.disabled = isLoading));
+}
+
+//測試 Loading 時間
+function pause(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// 集中按鈕點擊邏輯
+function updateBtnLogic(area: AreaKey) {
+  btnTargets.forEach((btn) => {
+    const isActive = btn.getAttribute("title") === area;
+
+    btn.classList.toggle("active", isActive);
+  });
+}

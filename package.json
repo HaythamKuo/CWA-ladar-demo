@@ -7,7 +7,7 @@
     "typescript": "^5.5.0"
   },
   "scripts": {
-    "dev:build": "bun build --watch",
+    "dev:build": "bun build src/popup.ts src/background.ts --outdir dist --target browser --watch",
     "dev:typecheck": "bun x tsc --noEmit -w",
     "dev": "bun run dev:build & bun run dev:typecheck",
     "typecheck": "bun x tsc --noEmit",
