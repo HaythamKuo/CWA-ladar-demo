@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>插件設定</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>🐾 氣象站偏好設定</h1>
+
+    <div class="setting-item">
+      <label>
+        <input type="checkbox" id="darkMode" /> 啟用「黑柴模式」(黑暗模式)
+      </label>
+    </div>
+
+    <div class="setting-item">
+      <p>自訂常用區域 (可複選)：</p>
+      <select id="regions" multiple>
+        <option value="north">北部地區 (拉不拉多)</option>
+        <option value="central">中部地區 (黃金獵犬)</option>
+        <option value="south">南部地區 (柴犬)</option>
+        <option value="east">東部地區 (邊境牧羊犬)</option>
+      </select>
+    </div>
+
+    <button id="save">儲存設定</button>
+    <p id="status"></p>
+
+    <script src="options.js"></script>
+  </body>
+</html>

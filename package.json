@@ -12,7 +12,7 @@
     "dev": "bun run dev:build & bun run dev:typecheck",
     "typecheck": "bun x tsc --noEmit",
     "server": "bun run --watch server/server.ts",
-    "build": "bun build src/background.ts src/popup.ts --outdir dist --minify",
+    "build": "bun build src/background.ts src/popup.ts --outdir dist --minify --target browser",
     "build:all": "bun build src/background.ts src/popup.ts --outdir dist --minify && cp manifest.json dist/ && cp -r static/* dist/",
     "sass:build": "sass src/style.scss dist/style.css --style=compressed",
     "sass:watch": "sass --watch static/popup.scss static/popup.css"

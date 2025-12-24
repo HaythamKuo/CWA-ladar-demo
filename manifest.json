@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "CWA regional ladar representation project",
+  "name": "CWA regional ladar",
   "version": "1.0",
   "description": "Demo extension built with Bun + TypeScript",
   "icons": {
@@ -16,7 +16,7 @@
   },
 
   "options_ui": {
-    "page": "static/options.html",
+    "page": "static/option.html",
     "chrome_style": true,
     "browser_style": true
   },

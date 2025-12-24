@@ -1,5 +1,16 @@
 import type { AreaKey } from "../server/utils/areas";
 
+//開啟options.html
+const gear = document.querySelector<HTMLImageElement>(".header_setting");
+
+gear?.addEventListener("click", () => {
+  console.log("有被點擊");
+
+  browser.runtime
+    .openOptionsPage()
+    .catch((err) => console.log("開啟options失敗", err));
+});
+
 const btnContainer = document.querySelector<HTMLElement>(".btnCollection")!;
 const btnTargets = btnContainer.querySelectorAll("button");
 let specificArea: AreaKey = "north";
