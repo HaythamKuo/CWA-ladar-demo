@@ -206,6 +206,13 @@ async function init() {
 
   const areaToUse: AreaKey = (area as AreaKey) ?? "north";
 
+  const radioToSelect = document.querySelector<HTMLInputElement>(
+    `input[value='${areaToUse}']`
+  );
+  if (radioToSelect) {
+    radioToSelect.checked = true;
+  }
+
   updateBtnLogic(areaToUse);
 
   await renderRadar(areaToUse);
