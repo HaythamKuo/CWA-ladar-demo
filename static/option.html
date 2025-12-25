@@ -6,23 +6,36 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h1>🐾 氣象站偏好設定</h1>
+    <h1>雷達樣式偏好設定</h1>
 
-    <div class="setting-item">
-      <label> 日夜模式： <input type="checkbox" id="darkMode" /> </label>
+    <div class="option_setting-item">
+      <label>
+        日夜模式：
+        <input disabled type="checkbox" id="darkMode" /> (即將推出)</label
+      >
     </div>
 
-    <div class="setting-item">
-      <p>自訂常用區域 (可複選)：</p>
-      <select id="regions" multiple>
-        <option value="north">北部地區 (拉不拉多)</option>
-        <option value="central">中部地區 (黃金獵犬)</option>
-        <option value="south">南部地區 (柴犬)</option>
-        <option value="east">東部地區 (邊境牧羊犬)</option>
-      </select>
-    </div>
+    <div class="option_setting-item">
+      <fieldset>
+        <legend>自訂顯示區域(預設為新北地區)</legend>
 
-    <button id="save">儲存設定</button>
+        <div class="option_button-group">
+          <input type="radio" id="north" name="area" checked="" />
+          <label for="north">新北樹林</label>
+        </div>
+
+        <div class="option_button-group">
+          <input type="radio" id="center" name="area" />
+          <label for="center">台中南屯</label>
+        </div>
+
+        <div class="option_button-group">
+          <input type="radio" id="north" name="area" />
+          <label for="north">高雄林園</label>
+        </div>
+      </fieldset>
+      <button id="save">儲存設定</button>
+    </div>
 
     <script src="options.js"></script>
   </body>

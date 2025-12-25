@@ -1,13 +1,7 @@
 import type { AreaKey } from "../server/utils/areas";
 
-//開啟options.html
+// 宣告開啟的option.html的icon
 const gear = document.querySelector<HTMLImageElement>(".header_setting");
-
-gear?.addEventListener("click", () => {
-  browser.runtime
-    .openOptionsPage()
-    .catch((err) => console.log("開啟options失敗", err));
-});
 
 //宣告spinner
 const spinner = document.querySelector<HTMLElement>(".spin")!;
@@ -21,32 +15,10 @@ if (!btnContainer) {
 }
 
 /**
- * 將給定的時間字串格式化為本地語系的年/月/日 時:分:秒 格式。
- *
- * @param {string} time - 待格式化的時間字串 (e.g., ISO 格式)。
- * @returns {string} 格式化後的本地時間字串 (例如：2025/11/04 11:13:01)。
- */
-function formatTime(time?: string) {
-  if (!time) return;
-
-  const date = new Date(time);
-
-  const formattedTime = new Intl.DateTimeFormat("zh-tw", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(date);
-  return formattedTime;
-}
-
-/**
  * 負責將雷達資料渲染到網頁上。
  *
  * 1. 透過瀏覽器擴充功能訊息發送器 (`browser.runtime.sendMessage`) 請求特定區域資料。
- * 2. 根據請求的區域更新按鈕的 CSS 樣式 (`default` class)。
+ * 2. 根據請求的區域更新按鈕的 CSS 樣式 (active)。
  * 3. 格式化並顯示資料的最近更新時間 (`apiLatestTime` 或 `dateTime`)。
  * 4. 將雷達回波圖的 URL 嵌入到 `<img>` 標籤中進行顯示。
  * 5. 處理並顯示任何潛在的錯誤訊息。
@@ -66,20 +38,16 @@ async function renderRadar(area: AreaKey) {
     return;
   }
 
+  spinner.style.display = "flex";
+  toggleBtnStatus(true);
+  await new Promise(requestAnimationFrame);
   try {
-    spinner.style.display = "flex";
-    toggleBtnStatus(true);
-    await pause(2000);
+    // await pause(2000);
 
     const radarImg = await browser.runtime.sendMessage({
       type: "FETCH_AREA",
       data: specificArea,
     });
-
-    // btnTargets.forEach((e) => {
-    //   e.classList.remove("default");
-    //   if (e.getAttribute("title") === area) e.classList.add("default");
-    // });
 
     updateBtnLogic(area);
 
@@ -150,6 +118,14 @@ btnContainer?.addEventListener("click", async (e: MouseEvent) => {
 
   await renderRadar(specificArea);
 });
+
+//點擊事件指向option page
+gear?.addEventListener("click", () => {
+  browser.runtime
+    .openOptionsPage()
+    .catch((err) => console.log("開啟options失敗", err));
+});
+
 renderRadar(specificArea);
 
 ////////////////////////////////////////////////////////////////////////
@@ -173,4 +149,26 @@ function updateBtnLogic(area: AreaKey) {
 
     btn.classList.toggle("active", isActive);
   });
+}
+
+/**
+ * 將給定的時間字串格式化為本地語系的年/月/日 時:分:秒 格式。
+ *
+ * @param {string} time - 待格式化的時間字串 (e.g., ISO 格式)。
+ * @returns {string} 格式化後的本地時間字串 (例如：2025/11/04 11:13:01)。
+ */
+function formatTime(time?: string) {
+  if (!time) return;
+
+  const date = new Date(time);
+
+  const formattedTime = new Intl.DateTimeFormat("zh-tw", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(date);
+  return formattedTime;
 }
