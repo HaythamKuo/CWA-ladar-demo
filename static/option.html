@@ -20,23 +20,23 @@
         <legend>自訂顯示區域(預設為新北地區)</legend>
 
         <div class="option_button-group">
-          <input type="radio" id="north" name="area" checked="" />
+          <input type="radio" id="north" name="area" checked="" value="north" />
           <label for="north">新北樹林</label>
         </div>
 
         <div class="option_button-group">
-          <input type="radio" id="center" name="area" />
+          <input type="radio" id="center" name="area" value="center" />
           <label for="center">台中南屯</label>
         </div>
 
         <div class="option_button-group">
-          <input type="radio" id="north" name="area" />
-          <label for="north">高雄林園</label>
+          <input type="radio" id="south" name="area" value="south" />
+          <label for="south">高雄林園</label>
         </div>
       </fieldset>
-      <button id="save">儲存設定</button>
+      <button id="save" class="save">儲存設定</button>
     </div>
 
-    <script src="options.js"></script>
+    <script type="module" src="../dist/popup.js"></script>
   </body>
 </html>

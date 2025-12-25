@@ -1,5 +1,8 @@
 import type { AreaKey } from "../server/utils/areas";
 
+bindOption();
+init();
+
 // 宣告開啟的option.html的icon
 const gear = document.querySelector<HTMLImageElement>(".header_setting");
 
@@ -8,7 +11,8 @@ const spinner = document.querySelector<HTMLElement>(".spin")!;
 
 const btnContainer = document.querySelector<HTMLElement>(".btnCollection")!;
 const btnTargets = btnContainer.querySelectorAll("button");
-let specificArea: AreaKey = "north";
+
+// let specificArea: AreaKey = "north";
 
 if (!btnContainer) {
   console.log("按鈕容器失效");
@@ -39,14 +43,14 @@ async function renderRadar(area: AreaKey) {
   }
 
   spinner.style.display = "flex";
-  toggleBtnStatus(true);
+  toggleBtnDisabled(true);
   await new Promise(requestAnimationFrame);
   try {
     // await pause(2000);
 
     const radarImg = await browser.runtime.sendMessage({
       type: "FETCH_AREA",
-      data: specificArea,
+      data: area,
     });
 
     updateBtnLogic(area);
@@ -75,20 +79,20 @@ async function renderRadar(area: AreaKey) {
     }
     // if 成功
     imgs.onload = () => {
-      spinner.style.display = "none"; // 圖片真的顯示出來了才關掉
-      toggleBtnStatus(false);
+      spinner.style.display = "none";
+      toggleBtnDisabled(false);
     };
 
     //if 失敗
     imgs.onerror = () => {
       spinner.style.display = "none";
-      toggleBtnStatus(false);
+      toggleBtnDisabled(false);
     };
 
     imgs.src = radarImg?.radarUrl;
   } catch (error) {
     spinner.style.display = "none";
-    toggleBtnStatus(false);
+    toggleBtnDisabled(false);
 
     console.error(error);
     container.textContent = `取得資料失敗: ${
@@ -112,11 +116,9 @@ btnContainer?.addEventListener("click", async (e: MouseEvent) => {
 
   const area = target.getAttribute("title") as AreaKey;
 
-  specificArea = area;
+  updateBtnLogic(area);
 
-  updateBtnLogic(specificArea);
-
-  await renderRadar(specificArea);
+  await renderRadar(area);
 });
 
 //點擊事件指向option page
@@ -126,21 +128,19 @@ gear?.addEventListener("click", () => {
     .catch((err) => console.log("開啟options失敗", err));
 });
 
-renderRadar(specificArea);
-
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //切換button status
-function toggleBtnStatus(isLoading: boolean) {
+function toggleBtnDisabled(isLoading: boolean) {
   btnTargets.forEach((b) => (b.disabled = isLoading));
 }
 
 //測試 Loading 時間
-function pause(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function pause(ms: number): Promise<void> {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
 
 // 集中按鈕點擊邏輯
 function updateBtnLogic(area: AreaKey) {
@@ -171,4 +171,42 @@ function formatTime(time?: string) {
     second: "2-digit",
   }).format(date);
   return formattedTime;
+}
+
+/**
+ * 如果沒有設置area 預設為新北
+ * 如果有 則依指定選項
+ * 現在是透過全域函式跑參數
+ * 我必須先 await 選項 如果有則讓他跑該參數否則維持原樣
+ *
+ */
+function bindOption() {
+  const saveBtn = document.querySelector<HTMLButtonElement>(".save");
+
+  saveBtn?.addEventListener("click", async () => {
+    const selectedArea = document.querySelector<HTMLInputElement>(
+      'input[name="area"]:checked'
+    );
+
+    if (!selectedArea) return;
+
+    const area = selectedArea.value as AreaKey;
+
+    await browser.storage.sync.set({ area });
+
+    await renderRadar(area);
+  });
+}
+
+/**
+ * 負責初始化 如果有option 就以option替代預設的area
+ */
+async function init() {
+  const { area } = await browser.storage.sync.get("area");
+
+  const areaToUse: AreaKey = (area as AreaKey) ?? "north";
+
+  updateBtnLogic(areaToUse);
+
+  await renderRadar(areaToUse);
 }

@@ -20,6 +20,17 @@
     "chrome_style": true,
     "browser_style": true
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{4DE3A017-EC3C-4831-B338-541B179C6EC4}",
+
+      "data_collection": {
+        "data_collection_permissions": {
+          "required": ["none"]
+        }
+      }
+    }
+  },
 
   "permissions": [
     "alarms",
