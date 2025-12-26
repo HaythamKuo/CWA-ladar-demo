@@ -3,6 +3,8 @@ import type { AreaKey } from "../server/utils/areas";
 bindOption();
 init();
 
+// 宣告option.html的確定button
+
 // 宣告開啟的option.html的icon
 const gear = document.querySelector<HTMLImageElement>(".header_setting");
 
@@ -180,10 +182,20 @@ function formatTime(time?: string) {
  * 我必須先 await 選項 如果有則讓他跑該參數否則維持原樣
  *
  */
-function bindOption() {
-  const saveBtn = document.querySelector<HTMLButtonElement>(".save");
 
-  saveBtn?.addEventListener("click", async () => {
+/**
+ * 這是按鈕內的span 透過點擊的status修改其內容
+ *
+ */
+
+function bindOption() {
+  const saveBtn = document.querySelector<HTMLButtonElement>(".save")!;
+  const spanTxt = saveBtn?.querySelector(".button_span")!;
+  const radios = document.querySelectorAll('input[name="area"]');
+
+  saveBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+
     const selectedArea = document.querySelector<HTMLInputElement>(
       'input[name="area"]:checked'
     );
@@ -192,10 +204,25 @@ function bindOption() {
 
     const area = selectedArea.value as AreaKey;
 
+    spanTxt.textContent = "儲存中";
+
     await browser.storage.sync.set({ area });
 
     await renderRadar(area);
+
+    saveBtn.disabled = true;
+    saveBtn.style.pointerEvents = "none";
+    spanTxt.textContent = "儲存成功";
   });
+
+  //todo
+  radios.forEach((r) =>
+    r.addEventListener("change", () => {
+      saveBtn.disabled = false;
+      saveBtn.style.pointerEvents = "auto";
+      spanTxt.textContent = "儲存設定";
+    })
+  );
 }
 
 /**
