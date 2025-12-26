@@ -1,3 +1,7 @@
+$primary-color-one: white;
+$primary-day-backGround: #385c7e;
+////////////////////////////////////////////////////////////////////////////////
+
 @mixin flex-center($direction: row) {
   display: flex;
   flex-direction: $direction;
@@ -83,7 +87,8 @@ body {
 
     &:hover {
       color: #fff;
-      background-color: #1a1a1a;
+      // background-color: #1a1a1a;
+      background-color: $primary-day-backGround;
       box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
       transform: translateY(-2px);
     }
@@ -94,7 +99,8 @@ body {
 
     &.active {
       color: #fff;
-      background-color: #1a1a1a;
+      // background-color: #1a1a1a;
+      background-color: $primary-day-backGround;
       box-shadow: none;
       transform: translateY(0);
       cursor: not-allowed;
@@ -181,54 +187,95 @@ $uib-color: #474554;
 
 // 這裡是options的css
 
-fieldset {
-  border: 0;
+.option_setting-item {
   display: flex;
+  align-items: center;
+  flex-direction: column;
 
-  legend {
-    // display: flex;
-    // color: red;
-    // background-color: #3b3b3b;
-    width: 100%;
-    margin: 1.25rem 0 0 1rem;
-    font-size: 1rem;
-    font-weight: bold;
+  fieldset {
+    border: 0;
+    display: flex;
+
+    legend {
+      width: 100%;
+      margin: 1.25rem 0 1rem 1rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .option_button-group {
+      flex-grow: 1;
+      margin: auto;
+
+      input[type="radio"] {
+        display: none;
+
+        &:checked + label {
+          // background-color: white;
+          background-color: #385c7e;
+          // color: #02375a;
+          color: $primary-color-one;
+          border: 1px solid #2b426d;
+        }
+      }
+
+      label {
+        display: inline-block;
+        padding: 10px 20px;
+        cursor: pointer;
+
+        border: 1px solid #2b426d;
+        background-color: $primary-color-one;
+
+        color: #02375a;
+
+        border-radius: 15px;
+        transition: all 0.2s ease;
+        text-align: center;
+
+        flex-grow: 1;
+        flex-basis: 0;
+        width: 95px;
+
+        font-size: 13px;
+        font-weight: bold;
+        margin: 5px;
+        box-shadow: 0px 0px 50px -15px #000;
+      }
+    }
   }
 
-  .option_button-group {
-    flex-grow: 1;
-    margin: auto;
+  .save {
+    margin-top: 0.5rem;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.75em;
+    background: $primary-color-one;
 
-    input[type="radio"] {
-      display: none;
+    .button_span {
+      display: block;
+      box-sizing: border-box;
+      border: 2px solid black;
+      border-radius: 0.75em;
+      padding: 0.5em 1em;
+      background: $primary-color-one;
+      color: black;
+      transform: translateY(-0.2em);
+      transition: transform 0.1s ease;
+    }
 
-      &:checked + label {
-        background-color: white;
-        color: #02375a;
-        border: 1px solid #2b426d;
+    &:hover {
+      .button_span {
+        transform: translateY(-0.33em);
       }
     }
 
-    label {
-      display: inline-block;
-      padding: 10px 20px;
-      cursor: pointer;
-
-      border: 1px solid #2b426d;
-      background-color: #385c7e;
-      color: white;
-
-      border-radius: 15px;
-      transition: all 0.2s ease;
-      text-align: center;
-
-      flex-grow: 1;
-      flex-basis: 0;
-      width: 90px;
-
-      font-size: 13px;
-      margin: 5px;
-      box-shadow: 0px 0px 50px -15px #000;
+    &:active {
+      .button_span {
+        transform: translateY(0);
+      }
     }
   }
 }

@@ -76,7 +76,7 @@ body {
 }
 .btnCollection button:hover {
   color: #fff;
-  background-color: #1a1a1a;
+  background-color: #385c7e;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
@@ -86,7 +86,7 @@ body {
 }
 .btnCollection button.active {
   color: #fff;
-  background-color: #1a1a1a;
+  background-color: #385c7e;
   box-shadow: none;
   transform: translateY(0);
   cursor: not-allowed;
@@ -153,44 +153,76 @@ body {
     animation-timing-function: ease-in;
   }
 }
-fieldset {
+.option_setting-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.option_setting-item fieldset {
   border: 0;
   display: flex;
 }
-fieldset legend {
+.option_setting-item fieldset legend {
   width: 100%;
-  margin: 1.25rem 0 0 1rem;
-  font-size: 1rem;
+  margin: 1.25rem 0 1rem 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
 }
-fieldset .option_button-group {
+.option_setting-item fieldset .option_button-group {
   flex-grow: 1;
   margin: auto;
 }
-fieldset .option_button-group input[type=radio] {
+.option_setting-item fieldset .option_button-group input[type=radio] {
   display: none;
 }
-fieldset .option_button-group input[type=radio]:checked + label {
-  background-color: white;
-  color: #02375a;
+.option_setting-item fieldset .option_button-group input[type=radio]:checked + label {
+  background-color: #385c7e;
+  color: white;
   border: 1px solid #2b426d;
 }
-fieldset .option_button-group label {
+.option_setting-item fieldset .option_button-group label {
   display: inline-block;
   padding: 10px 20px;
   cursor: pointer;
   border: 1px solid #2b426d;
-  background-color: #385c7e;
-  color: white;
+  background-color: white;
+  color: #02375a;
   border-radius: 15px;
   transition: all 0.2s ease;
   text-align: center;
   flex-grow: 1;
   flex-basis: 0;
-  width: 90px;
+  width: 95px;
   font-size: 13px;
+  font-weight: bold;
   margin: 5px;
   box-shadow: 0px 0px 50px -15px #000;
+}
+.option_setting-item .save {
+  margin-top: 0.5rem;
+  font-size: 17px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.75em;
+  background: white;
+}
+.option_setting-item .save .button_span {
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid black;
+  border-radius: 0.75em;
+  padding: 0.5em 1em;
+  background: white;
+  color: black;
+  transform: translateY(-0.2em);
+  transition: transform 0.1s ease;
+}
+.option_setting-item .save:hover .button_span {
+  transform: translateY(-0.33em);
+}
+.option_setting-item .save:active .button_span {
+  transform: translateY(0);
 }
 
 /*# sourceMappingURL=popup.css.map */
